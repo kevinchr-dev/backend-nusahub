@@ -10,17 +10,17 @@ import (
 
 // Project merepresentasikan tabel projects
 type Project struct {
-	ID                      uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
-	CreatorWalletAddress    string    `gorm:"type:varchar(42);not null" json:"creator_wallet_address"`
-	Title                   string    `gorm:"type:varchar(255);not null" json:"title"`
-	Description             string    `gorm:"type:text" json:"description"`
-	CoverImageURL           string    `gorm:"type:varchar(255)" json:"cover_image_url"`
-	DeveloperName           string    `gorm:"type:varchar(100)" json:"developer_name"`
-	Genre                   string    `gorm:"type:varchar(50)" json:"genre"`
-	GameType                string    `gorm:"type:varchar(10)" json:"game_type"`
+	ID                      uuid.UUID      `gorm:"type:uuid;primaryKey" json:"id"`
+	CreatorWalletAddress    string         `gorm:"type:varchar(42);not null" json:"creator_wallet_address"`
+	Title                   string         `gorm:"type:varchar(255);not null" json:"title"`
+	Description             string         `gorm:"type:text" json:"description"`
+	CoverImageURL           string         `gorm:"type:varchar(255)" json:"cover_image_url"`
+	DeveloperName           string         `gorm:"type:varchar(100)" json:"developer_name"`
+	Genre                   string         `gorm:"type:varchar(50)" json:"genre"`
+	GameType                string         `gorm:"type:varchar(10)" json:"game_type"`
 	InvestorWalletAddresses pq.StringArray `gorm:"type:text[]" json:"investor_wallet_addresses"` // Array of investor wallet addresses
-	CreatedAt               time.Time `json:"created_at"`
-	UpdatedAt               time.Time `json:"updated_at"`
+	CreatedAt               time.Time      `json:"created_at"`
+	UpdatedAt               time.Time      `json:"updated_at"`
 }
 
 // BeforeCreate hook untuk generate UUID v7 sebelum insert
