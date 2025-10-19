@@ -1,0 +1,741 @@
+basePath: /api/v1
+definitions:
+  model.Comment:
+    properties:
+      author_wallet_address:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      parent_comment_id:
+        type: string
+      project_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.ExternalLink:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        description: e.g., "Instagram", "Twitter", "Website"
+        type: string
+      project_id:
+        type: string
+      updated_at:
+        type: string
+      url:
+        description: The actual URL
+        type: string
+    type: object
+  model.Project:
+    properties:
+      cover_image_url:
+        type: string
+      created_at:
+        type: string
+      creator_wallet_address:
+        type: string
+      description:
+        type: string
+      developer_name:
+        type: string
+      game_type:
+        type: string
+      genre:
+        type: string
+      id:
+        type: string
+      investor_wallet_addresses:
+        description: Array of investor wallet addresses
+        items:
+          type: string
+        type: array
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  model.UserProfile:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      kyc_status:
+        type: string
+      profile_image_url:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+      wallet_address:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@web3crowdfunding.com
+    name: API Support
+  description: REST API service untuk platform crowdfunding Web3. API ini berfungsi
+    sebagai lapisan data off-chain yang berkomunikasi dengan frontend. State krusial
+    dan transaksi finansial ditangani oleh smart contract.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Web3 Crowdfunding API
+  version: "1.0"
+paths:
+  /profiles/{walletAddress}:
+    get:
+      consumes:
+      - application/json
+      description: Get user profile by wallet address
+      parameters:
+      - description: Ethereum Wallet Address (42 chars)
+        in: path
+        name: walletAddress
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserProfile'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user profile
+      tags:
+      - User Profiles
+    put:
+      consumes:
+      - application/json
+      description: Create a new profile or update existing one (Upsert operation)
+      parameters:
+      - description: Ethereum Wallet Address (42 chars)
+        in: path
+        name: walletAddress
+        required: true
+        type: string
+      - description: User profile data
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserProfile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserProfile'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create or update user profile
+      tags:
+      - User Profiles
+  /projects:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve list of all crowdfunding projects
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Project'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all projects
+      tags:
+      - Projects
+    post:
+      consumes:
+      - application/json
+      description: Create a new crowdfunding project entry. UUID v7 will be auto-generated
+      parameters:
+      - description: Project data
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/model.Project'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Project'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create new project
+      tags:
+      - Projects
+  /projects/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Project'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get project by ID
+      tags:
+      - Projects
+    patch:
+      consumes:
+      - application/json
+      description: Partially update project information
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Fields to update
+        in: body
+        name: project
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Project'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update project
+      tags:
+      - Projects
+  /projects/{id}/comments:
+    get:
+      consumes:
+      - application/json
+      description: Get all comments for a specific project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Comment'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get project comments
+      tags:
+      - Comments
+    post:
+      consumes:
+      - application/json
+      description: Add a new comment to a project. Supports nested comments via parent_comment_id
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Comment data
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/model.Comment'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Comment'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create comment
+      tags:
+      - Comments
+  /projects/{id}/investors:
+    get:
+      consumes:
+      - application/json
+      description: Get all investor wallet addresses for a project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get project investors
+      tags:
+      - Projects
+    post:
+      consumes:
+      - application/json
+      description: Add an investor's wallet address to a project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Investor wallet address
+        in: body
+        name: body
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add investor to project
+      tags:
+      - Projects
+  /projects/{id}/investors/{walletAddress}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove an investor's wallet address from a project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Investor wallet address
+        in: path
+        name: walletAddress
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Remove investor from project
+      tags:
+      - Projects
+  /projects/{id}/links:
+    get:
+      consumes:
+      - application/json
+      description: Get all external links for a specific project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ExternalLink'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get project external links
+      tags:
+      - External Links
+    post:
+      consumes:
+      - application/json
+      description: Add a new external link to a project (e.g., Instagram, Twitter,
+        Website)
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: External link data
+        in: body
+        name: link
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExternalLink'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.ExternalLink'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create external link
+      tags:
+      - External Links
+  /projects/{id}/links/{linkId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an external link from a project
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Link ID (UUID v7)
+        in: path
+        name: linkId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete external link
+      tags:
+      - External Links
+    put:
+      consumes:
+      - application/json
+      description: Update an external link
+      parameters:
+      - description: Project ID (UUID v7)
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Link ID (UUID v7)
+        in: path
+        name: linkId
+        required: true
+        type: string
+      - description: External link data
+        in: body
+        name: link
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExternalLink'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ExternalLink'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update external link
+      tags:
+      - External Links
+schemes:
+- http
+- https
+swagger: "2.0"
+tags:
+- description: Endpoints untuk mengelola proyek crowdfunding
+  name: Projects
+- description: Endpoints untuk mengelola profil pengguna
+  name: User Profiles
+- description: Endpoints untuk mengelola komentar proyek
+  name: Comments
+- description: Health check endpoint
+  name: Health

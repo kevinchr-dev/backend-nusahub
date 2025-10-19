@@ -1,0 +1,18 @@
+services:
+  # API Service - Using External Database
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web3-crowdfunding-api
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - web3-network
+
+networks:
+  web3-network:
+    driver: bridge

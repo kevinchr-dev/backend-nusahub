@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "web3-crowdfunding-api",
+		"name": "Web3 Crowdfunding API",
+		"description": "Complete API collection for Web3 Crowdfunding Platform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get All Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects"]
+						}
+					}
+				},
+				{
+					"name": "Get Project by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects/{{project_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects", "{{project_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Create Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"creator_wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"title\": \"Epic Web3 RPG Game\",\n  \"description\": \"An immersive blockchain-based RPG with NFT items and play-to-earn mechanics\",\n  \"cover_image_url\": \"https://example.com/images/game-cover.jpg\",\n  \"developer_name\": \"GameDev Studios\",\n  \"genre\": \"RPG\",\n  \"game_type\": \"web3\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects"]
+						}
+					}
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Game Title\",\n  \"description\": \"Updated description with more details\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects/{{project_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects", "{{project_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Profiles",
+			"item": [
+				{
+					"name": "Get Profile by Wallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/profiles/{{wallet_address}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "profiles", "{{wallet_address}}"]
+						}
+					}
+				},
+				{
+					"name": "Create or Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"gamer123\",\n  \"email\": \"gamer@example.com\",\n  \"profile_image_url\": \"https://example.com/avatars/gamer.jpg\",\n  \"kyc_status\": \"verified\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/profiles/{{wallet_address}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "profiles", "{{wallet_address}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "Get Project Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects/{{project_id}}/comments",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects", "{{project_id}}", "comments"]
+						}
+					}
+				},
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author_wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"content\": \"This project looks amazing! Can't wait to play it.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects/{{project_id}}/comments",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects", "{{project_id}}", "comments"]
+						}
+					}
+				},
+				{
+					"name": "Create Reply Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"author_wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"content\": \"Thank you for your support!\",\n  \"parent_comment_id\": \"{{parent_comment_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/projects/{{project_id}}/comments",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "projects", "{{project_id}}", "comments"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/health",
+					"host": ["{{base_url}}"],
+					"path": ["api", "v1", "health"]
+				}
+			}
+		},
+		{
+			"name": "Root",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/",
+					"host": ["{{base_url}}"],
+					"path": [""]
+				}
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "project_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "wallet_address",
+			"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+			"type": "string"
+		},
+		{
+			"key": "parent_comment_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
