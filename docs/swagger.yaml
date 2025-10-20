@@ -34,30 +34,39 @@ definitions:
         description: The actual URL
         type: string
     type: object
-  model.Project:
+  model.ProjectSwagger:
     properties:
       cover_image_url:
+        example: https://example.com/cover.jpg
         type: string
       created_at:
         type: string
       creator_wallet_address:
+        example: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
         type: string
       description:
+        example: An amazing blockchain RPG game
         type: string
       developer_name:
+        example: Epic Games Studio
         type: string
       game_type:
+        example: web3
         type: string
       genre:
+        example: RPG
         type: string
       id:
+        example: 0199fb01-ae3c-7c26-b70a-8f221585ccb4
         type: string
       investor_wallet_addresses:
-        description: Array of investor wallet addresses
+        example:
+        - '["0xabc..."]'
         items:
           type: string
         type: array
       title:
+        example: Epic RPG Game
         type: string
       updated_at:
         type: string
@@ -79,7 +88,7 @@ definitions:
       wallet_address:
         type: string
     type: object
-host: localhost:3000
+host: 103.197.188.137:3000
 info:
   contact:
     email: support@web3crowdfunding.com
@@ -189,7 +198,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Project'
+              $ref: '#/definitions/model.ProjectSwagger'
             type: array
         "500":
           description: Internal Server Error
@@ -210,14 +219,14 @@ paths:
         name: project
         required: true
         schema:
-          $ref: '#/definitions/model.Project'
+          $ref: '#/definitions/model.ProjectSwagger'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.Project'
+            $ref: '#/definitions/model.ProjectSwagger'
         "400":
           description: Bad Request
           schema:
@@ -250,7 +259,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Project'
+            $ref: '#/definitions/model.ProjectSwagger'
         "400":
           description: Bad Request
           schema:
@@ -295,7 +304,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Project'
+            $ref: '#/definitions/model.ProjectSwagger'
         "400":
           description: Bad Request
           schema:

@@ -27,7 +27,7 @@ import (
 // @license.name  MIT
 // @license.url   https://opensource.org/licenses/MIT
 
-// @host      localhost:3000
+// @host      103.197.188.137:3000
 // @BasePath  /api/v1
 
 // @schemes http https

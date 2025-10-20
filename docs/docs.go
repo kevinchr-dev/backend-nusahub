@@ -167,7 +167,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Project"
+                                "$ref": "#/definitions/model.ProjectSwagger"
                             }
                         }
                     },
@@ -201,7 +201,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Project"
+                            "$ref": "#/definitions/model.ProjectSwagger"
                         }
                     }
                 ],
@@ -209,7 +209,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/model.Project"
+                            "$ref": "#/definitions/model.ProjectSwagger"
                         }
                     },
                     "400": {
@@ -259,7 +259,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Project"
+                            "$ref": "#/definitions/model.ProjectSwagger"
                         }
                     },
                     "400": {
@@ -326,7 +326,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.Project"
+                            "$ref": "#/definitions/model.ProjectSwagger"
                         }
                     },
                     "400": {
@@ -1025,42 +1025,52 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Project": {
+        "model.ProjectSwagger": {
             "type": "object",
             "properties": {
                 "cover_image_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://example.com/cover.jpg"
                 },
                 "created_at": {
                     "type": "string"
                 },
                 "creator_wallet_address": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "An amazing blockchain RPG game"
                 },
                 "developer_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Epic Games Studio"
                 },
                 "game_type": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "web3"
                 },
                 "genre": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "RPG"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "0199fb01-ae3c-7c26-b70a-8f221585ccb4"
                 },
                 "investor_wallet_addresses": {
-                    "description": "Array of investor wallet addresses",
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "example": [
+                        "[\"0xabc...\"]"
+                    ]
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Epic RPG Game"
                 },
                 "updated_at": {
                     "type": "string"
@@ -1117,7 +1127,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:3000",
+	Host:             "103.197.188.137:3000",
 	BasePath:         "/api/v1",
 	Schemes:          []string{"http", "https"},
 	Title:            "Web3 Crowdfunding API",
