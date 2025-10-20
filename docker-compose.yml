@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     container_name: web3-crowdfunding-api
     ports:
-      - "3000:3000"
+      - "3001:3001"
     # env_file:
     #   - .env
     environment:
@@ -16,11 +16,12 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       DB_SSLMODE: ${DB_SSLMODE}
+      MIGRATE_ON_START: ${MIGRATE_ON_START}
       SERVER_PORT: 
     restart: unless-stopped
     networks:
-      - web3-network
+      - main_net
 
 networks:
-  web3-network:
-    driver: bridge
+  main_net:
+    external: true
