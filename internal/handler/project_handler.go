@@ -26,7 +26,7 @@ func NewProjectHandler(repo *repository.ProjectRepository) *ProjectHandler {
 // @Accept       json
 // @Produce      json
 // @Success      200  {array}   model.ProjectSwagger
-// @Failure      500  {object}  map[string]string
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects [get]
 func (h *ProjectHandler) GetAllProjects(c *fiber.Ctx) error {
 	projects, err := h.repo.GetAll()
@@ -47,9 +47,9 @@ func (h *ProjectHandler) GetAllProjects(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
 // @Success      200  {object}  model.ProjectSwagger
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Failure      400  {object}  model.ErrorResponse
+// @Failure      404  {object}  model.ErrorResponse
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects/{id} [get]
 func (h *ProjectHandler) GetProjectByID(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -82,10 +82,10 @@ func (h *ProjectHandler) GetProjectByID(c *fiber.Ctx) error {
 // @Tags         Projects
 // @Accept       json
 // @Produce      json
-// @Param        project  body      model.ProjectSwagger  true  "Project data"
+// @Param        project  body      model.ProjectCreate  true  "Project data"
 // @Success      201      {object}  model.ProjectSwagger
-// @Failure      400      {object}  map[string]string
-// @Failure      500      {object}  map[string]string
+// @Failure      400      {object}  model.ErrorResponse
+// @Failure      500      {object}  model.ErrorResponse
 // @Router       /projects [post]
 func (h *ProjectHandler) CreateProject(c *fiber.Ctx) error {
 	var project model.Project
@@ -128,11 +128,11 @@ func (h *ProjectHandler) CreateProject(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id       path      string             true  "Project ID (UUID v7)"
-// @Param        project  body      map[string]interface{}  true  "Fields to update"
+// @Param        project  body      model.ProjectPatch  true  "Fields to update"
 // @Success      200      {object}  model.ProjectSwagger
-// @Failure      400      {object}  map[string]string
-// @Failure      404      {object}  map[string]string
-// @Failure      500      {object}  map[string]string
+// @Failure      400      {object}  model.ErrorResponse
+// @Failure      404      {object}  model.ErrorResponse
+// @Failure      500      {object}  model.ErrorResponse
 // @Router       /projects/{id} [patch]
 func (h *ProjectHandler) UpdateProject(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -177,12 +177,12 @@ func (h *ProjectHandler) UpdateProject(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
-// @Param        body body      map[string]string  true  "Investor wallet address"
-// @Success      200  {object}  map[string]string
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      409  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Param        body body      model.AddInvestorRequest  true  "Investor wallet address"
+// @Success      200  {object}  model.GenericMessage
+// @Failure      400  {object}  model.ErrorResponse
+// @Failure      404  {object}  model.ErrorResponse
+// @Failure      409  {object}  model.ErrorResponse
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects/{id}/investors [post]
 func (h *ProjectHandler) AddInvestor(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -246,10 +246,10 @@ func (h *ProjectHandler) AddInvestor(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id             path      string  true  "Project ID (UUID v7)"
 // @Param        walletAddress  path      string  true  "Investor wallet address"
-// @Success      200            {object}  map[string]string
-// @Failure      400            {object}  map[string]string
-// @Failure      404            {object}  map[string]string
-// @Failure      500            {object}  map[string]string
+// @Success      200            {object}  model.GenericMessage
+// @Failure      400            {object}  model.ErrorResponse
+// @Failure      404            {object}  model.ErrorResponse
+// @Failure      500            {object}  model.ErrorResponse
 // @Router       /projects/{id}/investors/{walletAddress} [delete]
 func (h *ProjectHandler) RemoveInvestor(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -291,10 +291,10 @@ func (h *ProjectHandler) RemoveInvestor(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
-// @Success      200  {object}  map[string][]string
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Success      200  {object}  model.InvestorsResponse
+// @Failure      400  {object}  model.ErrorResponse
+// @Failure      404  {object}  model.ErrorResponse
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects/{id}/investors [get]
 func (h *ProjectHandler) GetInvestors(c *fiber.Ctx) error {
 	idParam := c.Params("id")

@@ -1,5 +1,11 @@
 basePath: /api/v1
 definitions:
+  model.AddInvestorRequest:
+    properties:
+      wallet_address:
+        example: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
+        type: string
+    type: object
   model.Comment:
     properties:
       author_wallet_address:
@@ -17,6 +23,24 @@ definitions:
       updated_at:
         type: string
     type: object
+  model.CommentCreate:
+    properties:
+      author_wallet_address:
+        example: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
+        type: string
+      content:
+        example: This project looks amazing!
+        type: string
+      parent_comment_id:
+        example: 0199fb01-b44b-7a26-9625-3be2baf2d905
+        type: string
+    type: object
+  model.ErrorResponse:
+    properties:
+      error:
+        example: Resource not found
+        type: string
+    type: object
   model.ExternalLink:
     properties:
       created_at:
@@ -32,6 +56,76 @@ definitions:
         type: string
       url:
         description: The actual URL
+        type: string
+    type: object
+  model.ExternalLinkCreate:
+    properties:
+      name:
+        example: Instagram
+        type: string
+      url:
+        example: https://instagram.com/mygame
+        type: string
+    type: object
+  model.GenericMessage:
+    properties:
+      message:
+        example: Investor added successfully
+        type: string
+    type: object
+  model.InvestorsResponse:
+    properties:
+      investors:
+        example:
+        - '["0x111..."'
+        - ' "0x222..."]'
+        items:
+          type: string
+        type: array
+    type: object
+  model.ProjectCreate:
+    properties:
+      cover_image_url:
+        example: https://example.com/image.jpg
+        type: string
+      creator_wallet_address:
+        example: 0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb
+        type: string
+      description:
+        example: This is an amazing Web3 game
+        type: string
+      developer_name:
+        example: GameDev Studios
+        type: string
+      game_type:
+        example: web3
+        type: string
+      genre:
+        example: RPG
+        type: string
+      title:
+        example: My Awesome Game
+        type: string
+    type: object
+  model.ProjectPatch:
+    properties:
+      cover_image_url:
+        example: https://example.com/new-image.jpg
+        type: string
+      description:
+        example: Updated description
+        type: string
+      developer_name:
+        example: New Studio Name
+        type: string
+      game_type:
+        example: web3
+        type: string
+      genre:
+        example: Action RPG
+        type: string
+      title:
+        example: Updated Game Title
         type: string
     type: object
   model.ProjectSwagger:
@@ -124,21 +218,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get user profile
       tags:
       - User Profiles
@@ -168,21 +256,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Create or update user profile
       tags:
       - User Profiles
@@ -203,9 +285,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get all projects
       tags:
       - Projects
@@ -219,7 +299,7 @@ paths:
         name: project
         required: true
         schema:
-          $ref: '#/definitions/model.ProjectSwagger'
+          $ref: '#/definitions/model.ProjectCreate'
       produces:
       - application/json
       responses:
@@ -230,15 +310,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Create new project
       tags:
       - Projects
@@ -263,21 +339,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get project by ID
       tags:
       - Projects
@@ -296,8 +366,7 @@ paths:
         name: project
         required: true
         schema:
-          additionalProperties: true
-          type: object
+          $ref: '#/definitions/model.ProjectPatch'
       produces:
       - application/json
       responses:
@@ -308,21 +377,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Update project
       tags:
       - Projects
@@ -349,21 +412,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get project comments
       tags:
       - Comments
@@ -382,7 +439,7 @@ paths:
         name: comment
         required: true
         schema:
-          $ref: '#/definitions/model.Comment'
+          $ref: '#/definitions/model.CommentCreate'
       produces:
       - application/json
       responses:
@@ -393,21 +450,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Create comment
       tags:
       - Comments
@@ -428,29 +479,19 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              items:
-                type: string
-              type: array
-            type: object
+            $ref: '#/definitions/model.InvestorsResponse'
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get project investors
       tags:
       - Projects
@@ -469,42 +510,30 @@ paths:
         name: body
         required: true
         schema:
-          additionalProperties:
-            type: string
-          type: object
+          $ref: '#/definitions/model.AddInvestorRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.GenericMessage'
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "409":
           description: Conflict
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Add investor to project
       tags:
       - Projects
@@ -530,27 +559,19 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.GenericMessage'
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Remove investor from project
       tags:
       - Projects
@@ -577,21 +598,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Get project external links
       tags:
       - External Links
@@ -611,7 +626,7 @@ paths:
         name: link
         required: true
         schema:
-          $ref: '#/definitions/model.ExternalLink'
+          $ref: '#/definitions/model.ExternalLinkCreate'
       produces:
       - application/json
       responses:
@@ -622,21 +637,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Create external link
       tags:
       - External Links
@@ -662,27 +671,19 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.GenericMessage'
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Delete external link
       tags:
       - External Links
@@ -706,7 +707,7 @@ paths:
         name: link
         required: true
         schema:
-          $ref: '#/definitions/model.ExternalLink'
+          $ref: '#/definitions/model.ExternalLinkCreate'
       produces:
       - application/json
       responses:
@@ -717,21 +718,15 @@ paths:
         "400":
           description: Bad Request
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "404":
           description: Not Found
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            $ref: '#/definitions/model.ErrorResponse'
       summary: Update external link
       tags:
       - External Links

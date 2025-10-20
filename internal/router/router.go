@@ -47,7 +47,7 @@ func SetupRoutes(app *fiber.App, projectHandler *handler.ProjectHandler, profile
 	// @Tags         Health
 	// @Accept       json
 	// @Produce      json
-	// @Success      200  {object}  map[string]string
+	// @Success      200  {object}  model.GenericMessage
 	// @Router       /health [get]
 	api.Get("/health", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{

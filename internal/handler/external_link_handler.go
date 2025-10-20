@@ -31,9 +31,9 @@ func NewExternalLinkHandler(repo *repository.ExternalLinkRepository, projectRepo
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
 // @Success      200  {array}   model.ExternalLink
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Failure      400  {object}  model.ErrorResponse
+// @Failure      404  {object}  model.ErrorResponse
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects/{id}/links [get]
 func (h *ExternalLinkHandler) GetLinksByProjectID(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -75,11 +75,11 @@ func (h *ExternalLinkHandler) GetLinksByProjectID(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id    path      string              true  "Project ID (UUID v7)"
-// @Param        link  body      model.ExternalLink  true  "External link data"
+// @Param        link  body      model.ExternalLinkCreate  true  "External link data"
 // @Success      201   {object}  model.ExternalLink
-// @Failure      400   {object}  map[string]string
-// @Failure      404   {object}  map[string]string
-// @Failure      500   {object}  map[string]string
+// @Failure      400   {object}  model.ErrorResponse
+// @Failure      404   {object}  model.ErrorResponse
+// @Failure      500   {object}  model.ErrorResponse
 // @Router       /projects/{id}/links [post]
 func (h *ExternalLinkHandler) CreateLink(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -147,11 +147,11 @@ func (h *ExternalLinkHandler) CreateLink(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id      path      string              true  "Project ID (UUID v7)"
 // @Param        linkId  path      string              true  "Link ID (UUID v7)"
-// @Param        link    body      model.ExternalLink  true  "External link data"
+// @Param        link    body      model.ExternalLinkCreate  true  "External link data"
 // @Success      200     {object}  model.ExternalLink
-// @Failure      400     {object}  map[string]string
-// @Failure      404     {object}  map[string]string
-// @Failure      500     {object}  map[string]string
+// @Failure      400     {object}  model.ErrorResponse
+// @Failure      404     {object}  model.ErrorResponse
+// @Failure      500     {object}  model.ErrorResponse
 // @Router       /projects/{id}/links/{linkId} [put]
 func (h *ExternalLinkHandler) UpdateLink(c *fiber.Ctx) error {
 	linkIDParam := c.Params("linkId")
@@ -207,10 +207,10 @@ func (h *ExternalLinkHandler) UpdateLink(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id      path      string  true  "Project ID (UUID v7)"
 // @Param        linkId  path      string  true  "Link ID (UUID v7)"
-// @Success      200     {object}  map[string]string
-// @Failure      400     {object}  map[string]string
-// @Failure      404     {object}  map[string]string
-// @Failure      500     {object}  map[string]string
+// @Success      200     {object}  model.GenericMessage
+// @Failure      400     {object}  model.ErrorResponse
+// @Failure      404     {object}  model.ErrorResponse
+// @Failure      500     {object}  model.ErrorResponse
 // @Router       /projects/{id}/links/{linkId} [delete]
 func (h *ExternalLinkHandler) DeleteLink(c *fiber.Ctx) error {
 	linkIDParam := c.Params("linkId")

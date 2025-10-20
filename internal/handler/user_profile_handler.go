@@ -26,9 +26,9 @@ func NewUserProfileHandler(repo *repository.UserProfileRepository) *UserProfileH
 // @Produce      json
 // @Param        walletAddress  path      string  true  "Ethereum Wallet Address (42 chars)"
 // @Success      200            {object}  model.UserProfile
-// @Failure      400            {object}  map[string]string
-// @Failure      404            {object}  map[string]string
-// @Failure      500            {object}  map[string]string
+// @Failure      400            {object}  model.ErrorResponse
+// @Failure      404            {object}  model.ErrorResponse
+// @Failure      500            {object}  model.ErrorResponse
 // @Router       /profiles/{walletAddress} [get]
 func (h *UserProfileHandler) GetProfileByWalletAddress(c *fiber.Ctx) error {
 	walletAddress := c.Params("walletAddress")
@@ -64,9 +64,9 @@ func (h *UserProfileHandler) GetProfileByWalletAddress(c *fiber.Ctx) error {
 // @Param        walletAddress  path      string             true  "Ethereum Wallet Address (42 chars)"
 // @Param        profile        body      model.UserProfile  true  "User profile data"
 // @Success      200            {object}  model.UserProfile
-// @Failure      400            {object}  map[string]string
-// @Failure      409            {object}  map[string]string
-// @Failure      500            {object}  map[string]string
+// @Failure      400            {object}  model.ErrorResponse
+// @Failure      409            {object}  model.ErrorResponse
+// @Failure      500            {object}  model.ErrorResponse
 // @Router       /profiles/{walletAddress} [put]
 func (h *UserProfileHandler) UpsertProfile(c *fiber.Ctx) error {
 	walletAddress := c.Params("walletAddress")

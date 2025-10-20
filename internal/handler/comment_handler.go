@@ -31,9 +31,9 @@ func NewCommentHandler(repo *repository.CommentRepository, projectRepo *reposito
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
 // @Success      200  {array}   model.Comment
-// @Failure      400  {object}  map[string]string
-// @Failure      404  {object}  map[string]string
-// @Failure      500  {object}  map[string]string
+// @Failure      400  {object}  model.ErrorResponse
+// @Failure      404  {object}  model.ErrorResponse
+// @Failure      500  {object}  model.ErrorResponse
 // @Router       /projects/{id}/comments [get]
 func (h *CommentHandler) GetCommentsByProjectID(c *fiber.Ctx) error {
 	idParam := c.Params("id")
@@ -75,11 +75,11 @@ func (h *CommentHandler) GetCommentsByProjectID(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id       path      string         true  "Project ID (UUID v7)"
-// @Param        comment  body      model.Comment  true  "Comment data"
+// @Param        comment  body      model.CommentCreate  true  "Comment data"
 // @Success      201      {object}  model.Comment
-// @Failure      400      {object}  map[string]string
-// @Failure      404      {object}  map[string]string
-// @Failure      500      {object}  map[string]string
+// @Failure      400      {object}  model.ErrorResponse
+// @Failure      404      {object}  model.ErrorResponse
+// @Failure      500      {object}  model.ErrorResponse
 // @Router       /projects/{id}/comments [post]
 func (h *CommentHandler) CreateComment(c *fiber.Ctx) error {
 	idParam := c.Params("id")
