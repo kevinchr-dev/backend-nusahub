@@ -29,18 +29,22 @@ func InitDatabase(cfg *config.Config) error {
 
 	log.Println("Database connection established")
 
-	// Auto migrate semua model
-	err = DB.AutoMigrate(
-		&model.Project{},
-		&model.UserProfile{},
-		&model.Comment{},
-		&model.ExternalLink{},
-	)
-	if err != nil {
-		return err
-	}
+	// Auto migrate semua model jika diizinkan oleh konfigurasi
+	if cfg.MigrateOnStart {
+		err = DB.AutoMigrate(
+			&model.Project{},
+			&model.UserProfile{},
+			&model.Comment{},
+			&model.ExternalLink{},
+		)
+		if err != nil {
+			return err
+		}
 
-	log.Println("Database migration completed")
+		log.Println("Database migration completed")
+	} else {
+		log.Println("Skipping auto-migration (MIGRATE_ON_START is false)")
+	}
 
 	return nil
 }

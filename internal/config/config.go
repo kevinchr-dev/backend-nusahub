@@ -17,6 +17,7 @@ type Config struct {
 	DBName     string
 	DBSSLMode  string
 	ServerPort string
+	MigrateOnStart bool
 }
 
 // LoadConfig memuat konfigurasi dari file .env
@@ -34,6 +35,7 @@ func LoadConfig() *Config {
 		DBName:     getEnv("DB_NAME", "web3_crowdfunding"),
 		DBSSLMode:  getEnv("DB_SSLMODE", "disable"),
 		ServerPort: getEnv("SERVER_PORT", "3000"),
+		MigrateOnStart: getEnv("MIGRATE_ON_START", "false") == "true",
 	}
 
 	return config
