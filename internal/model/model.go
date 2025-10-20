@@ -1,6 +1,8 @@
 package model
 
 import (
+	"database/sql/driver"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
@@ -10,17 +12,53 @@ import (
 
 // Project merepresentasikan tabel projects
 type Project struct {
-	ID                      uuid.UUID      `gorm:"type:uuid;primaryKey" json:"id"`
-	CreatorWalletAddress    string         `gorm:"type:varchar(42);not null" json:"creator_wallet_address"`
-	Title                   string         `gorm:"type:varchar(255);not null" json:"title"`
-	Description             string         `gorm:"type:text" json:"description"`
-	CoverImageURL           string         `gorm:"type:varchar(255)" json:"cover_image_url"`
-	DeveloperName           string         `gorm:"type:varchar(100)" json:"developer_name"`
-	Genre                   string         `gorm:"type:varchar(50)" json:"genre"`
-	GameType                string         `gorm:"type:varchar(10)" json:"game_type"`
-	InvestorWalletAddresses pq.StringArray `gorm:"type:text[]" json:"investor_wallet_addresses"` // Array of investor wallet addresses
-	CreatedAt               time.Time      `json:"created_at"`
-	UpdatedAt               time.Time      `json:"updated_at"`
+	ID                      uuid.UUID   `gorm:"type:uuid;primaryKey" json:"id"`
+	CreatorWalletAddress    string      `gorm:"type:varchar(42);not null" json:"creator_wallet_address"`
+	Title                   string      `gorm:"type:varchar(255);not null" json:"title"`
+	Description             string      `gorm:"type:text" json:"description"`
+	CoverImageURL           string      `gorm:"type:varchar(255)" json:"cover_image_url"`
+	DeveloperName           string      `gorm:"type:varchar(100)" json:"developer_name"`
+	Genre                   string      `gorm:"type:varchar(50)" json:"genre"`
+	GameType                string      `gorm:"type:varchar(10)" json:"game_type"`
+	InvestorWalletAddresses StringArray `gorm:"type:text[]" json:"investor_wallet_addresses" swaggertype:"[]string"` // Array of investor wallet addresses
+	CreatedAt               time.Time   `json:"created_at"`
+	UpdatedAt               time.Time   `json:"updated_at"`
+}
+
+// StringArray is a thin alias over pq.StringArray that implements
+// sql.Scanner, driver.Valuer and JSON marshal/unmarshal so it works
+// with GORM, pq and also is recognized by swag when annotated with
+// `swaggertype:"[]string"`.
+type StringArray pq.StringArray
+
+// Value implements driver.Valuer
+func (a StringArray) Value() (driver.Value, error) {
+	return pq.StringArray(a).Value()
+}
+
+// Scan implements sql.Scanner
+func (a *StringArray) Scan(src interface{}) error {
+	var tmp pq.StringArray
+	if err := tmp.Scan(src); err != nil {
+		return err
+	}
+	*a = StringArray(tmp)
+	return nil
+}
+
+// MarshalJSON converts to JSON array
+func (a StringArray) MarshalJSON() ([]byte, error) {
+	return json.Marshal([]string(a))
+}
+
+// UnmarshalJSON converts from JSON array
+func (a *StringArray) UnmarshalJSON(b []byte) error {
+	var s []string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+	*a = StringArray(s)
+	return nil
 }
 
 // BeforeCreate hook untuk generate UUID v7 sebelum insert

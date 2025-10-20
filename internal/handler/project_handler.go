@@ -25,7 +25,7 @@ func NewProjectHandler(repo *repository.ProjectRepository) *ProjectHandler {
 // @Tags         Projects
 // @Accept       json
 // @Produce      json
-// @Success      200  {array}   model.Project
+// @Success      200  {array}   model.ProjectSwagger
 // @Failure      500  {object}  map[string]string
 // @Router       /projects [get]
 func (h *ProjectHandler) GetAllProjects(c *fiber.Ctx) error {
@@ -46,7 +46,7 @@ func (h *ProjectHandler) GetAllProjects(c *fiber.Ctx) error {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Project ID (UUID v7)"
-// @Success      200  {object}  model.Project
+// @Success      200  {object}  model.ProjectSwagger
 // @Failure      400  {object}  map[string]string
 // @Failure      404  {object}  map[string]string
 // @Failure      500  {object}  map[string]string
@@ -82,8 +82,8 @@ func (h *ProjectHandler) GetProjectByID(c *fiber.Ctx) error {
 // @Tags         Projects
 // @Accept       json
 // @Produce      json
-// @Param        project  body      model.Project  true  "Project data"
-// @Success      201      {object}  model.Project
+// @Param        project  body      model.ProjectSwagger  true  "Project data"
+// @Success      201      {object}  model.ProjectSwagger
 // @Failure      400      {object}  map[string]string
 // @Failure      500      {object}  map[string]string
 // @Router       /projects [post]
@@ -129,7 +129,7 @@ func (h *ProjectHandler) CreateProject(c *fiber.Ctx) error {
 // @Produce      json
 // @Param        id       path      string             true  "Project ID (UUID v7)"
 // @Param        project  body      map[string]interface{}  true  "Fields to update"
-// @Success      200      {object}  model.Project
+// @Success      200      {object}  model.ProjectSwagger
 // @Failure      400      {object}  map[string]string
 // @Failure      404      {object}  map[string]string
 // @Failure      500      {object}  map[string]string
