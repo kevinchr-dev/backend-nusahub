@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	"github.com/kevinchr/web3-crowdfunding-api/internal/model"
 	"gorm.io/gorm"
 )
@@ -26,7 +25,7 @@ func (r *ProjectRepository) GetAll() ([]model.Project, error) {
 }
 
 // GetByID mengambil proyek berdasarkan ID
-func (r *ProjectRepository) GetByID(id uuid.UUID) (*model.Project, error) {
+func (r *ProjectRepository) GetByID(id uint64) (*model.Project, error) {
 	var project model.Project
 	result := r.db.First(&project, "id = ?", id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -46,7 +45,7 @@ func (r *ProjectRepository) Update(project *model.Project) error {
 }
 
 // UpdatePartial memperbarui sebagian field proyek
-func (r *ProjectRepository) UpdatePartial(id uuid.UUID, updates map[string]interface{}) (*model.Project, error) {
+func (r *ProjectRepository) UpdatePartial(id uint64, updates map[string]interface{}) (*model.Project, error) {
 	var project model.Project
 	result := r.db.First(&project, "id = ?", id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -64,12 +63,12 @@ func (r *ProjectRepository) UpdatePartial(id uuid.UUID, updates map[string]inter
 }
 
 // Delete menghapus proyek
-func (r *ProjectRepository) Delete(id uuid.UUID) error {
+func (r *ProjectRepository) Delete(id uint64) error {
 	return r.db.Delete(&model.Project{}, "id = ?", id).Error
 }
 
 // AddInvestor menambahkan wallet address investor ke project
-func (r *ProjectRepository) AddInvestor(projectID uuid.UUID, walletAddress string) error {
+func (r *ProjectRepository) AddInvestor(projectID uint64, walletAddress string) error {
 	var project model.Project
 	result := r.db.First(&project, "id = ?", projectID)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -92,7 +91,7 @@ func (r *ProjectRepository) AddInvestor(projectID uuid.UUID, walletAddress strin
 }
 
 // RemoveInvestor menghapus wallet address investor dari project
-func (r *ProjectRepository) RemoveInvestor(projectID uuid.UUID, walletAddress string) error {
+func (r *ProjectRepository) RemoveInvestor(projectID uint64, walletAddress string) error {
 	var project model.Project
 	result := r.db.First(&project, "id = ?", projectID)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -108,7 +107,7 @@ func (r *ProjectRepository) RemoveInvestor(projectID uuid.UUID, walletAddress st
 }
 
 // GetInvestors mengambil semua investor wallet addresses untuk project
-func (r *ProjectRepository) GetInvestors(projectID uuid.UUID) ([]string, error) {
+func (r *ProjectRepository) GetInvestors(projectID uint64) ([]string, error) {
 	var project model.Project
 	result := r.db.First(&project, "id = ?", projectID)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {

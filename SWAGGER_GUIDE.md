@@ -176,7 +176,7 @@ Tambahkan contoh di description:
 Pastikan model di `internal/model/model.go` memiliki json tags yang jelas:
 ```go
 type Project struct {
-    ID    uuid.UUID `json:"id" example:"550e8400-e29b-41d4-a716-446655440000"`
+  ID    uint64    `json:"id" example:"1420070400000000"`
     Title string    `json:"title" example:"My Awesome Game"`
 }
 ```

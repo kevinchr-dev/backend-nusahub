@@ -3,7 +3,6 @@ package repository
 import (
 	"errors"
 
-	"github.com/google/uuid"
 	"github.com/kevinchr/web3-crowdfunding-api/internal/model"
 	"gorm.io/gorm"
 )
@@ -19,14 +18,14 @@ func NewExternalLinkRepository(db *gorm.DB) *ExternalLinkRepository {
 }
 
 // GetByProjectID mengambil semua external links untuk sebuah proyek
-func (r *ExternalLinkRepository) GetByProjectID(projectID uuid.UUID) ([]model.ExternalLink, error) {
+func (r *ExternalLinkRepository) GetByProjectID(projectID uint64) ([]model.ExternalLink, error) {
 	var links []model.ExternalLink
 	result := r.db.Where("project_id = ?", projectID).Order("created_at ASC").Find(&links)
 	return links, result.Error
 }
 
 // GetByID mengambil external link berdasarkan ID
-func (r *ExternalLinkRepository) GetByID(id uuid.UUID) (*model.ExternalLink, error) {
+func (r *ExternalLinkRepository) GetByID(id uint64) (*model.ExternalLink, error) {
 	var link model.ExternalLink
 	result := r.db.First(&link, "id = ?", id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -46,11 +45,11 @@ func (r *ExternalLinkRepository) Update(link *model.ExternalLink) error {
 }
 
 // Delete menghapus external link
-func (r *ExternalLinkRepository) Delete(id uuid.UUID) error {
+func (r *ExternalLinkRepository) Delete(id uint64) error {
 	return r.db.Delete(&model.ExternalLink{}, "id = ?", id).Error
 }
 
 // DeleteByProjectID menghapus semua external links untuk sebuah proyek
-func (r *ExternalLinkRepository) DeleteByProjectID(projectID uuid.UUID) error {
+func (r *ExternalLinkRepository) DeleteByProjectID(projectID uint64) error {
 	return r.db.Where("project_id = ?", projectID).Delete(&model.ExternalLink{}).Error
 }
