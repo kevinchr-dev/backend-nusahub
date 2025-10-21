@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/lib/pq"
 	"github.com/kevinchr/web3-crowdfunding-api/internal/idgen"
+	"github.com/lib/pq"
 	"gorm.io/gorm"
 )
 
@@ -82,13 +82,13 @@ type UserProfile struct {
 
 // Comment merepresentasikan tabel comments
 type Comment struct {
-	ID                  uint64     `gorm:"type:bigint;primaryKey" json:"id"`
-	ProjectID           uint64     `gorm:"type:bigint;not null;index" json:"project_id"`
-	AuthorWalletAddress string     `gorm:"type:varchar(42);not null" json:"author_wallet_address"`
-	ParentCommentID     *uint64    `gorm:"type:bigint;index" json:"parent_comment_id"`
-	Content             string     `gorm:"type:text;not null" json:"content"`
-	CreatedAt           time.Time  `json:"created_at"`
-	UpdatedAt           time.Time  `json:"updated_at"`
+	ID                  uint64    `gorm:"type:bigint;primaryKey" json:"id"`
+	ProjectID           uint64    `gorm:"type:bigint;not null;index" json:"project_id"`
+	AuthorWalletAddress string    `gorm:"type:varchar(42);not null" json:"author_wallet_address"`
+	ParentCommentID     *uint64   `gorm:"type:bigint;index" json:"parent_comment_id"`
+	Content             string    `gorm:"type:text;not null" json:"content"`
+	CreatedAt           time.Time `json:"created_at"`
+	UpdatedAt           time.Time `json:"updated_at"`
 
 	// Relasi
 	Project       Project  `gorm:"foreignKey:ProjectID;constraint:OnDelete:CASCADE" json:"-"`
