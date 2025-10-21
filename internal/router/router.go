@@ -7,7 +7,7 @@ import (
 )
 
 // SetupRoutes mengatur semua rute API
-func SetupRoutes(app *fiber.App, projectHandler *handler.ProjectHandler, profileHandler *handler.UserProfileHandler, commentHandler *handler.CommentHandler, linkHandler *handler.ExternalLinkHandler) {
+func SetupRoutes(app *fiber.App, projectHandler *handler.ProjectHandler, profileHandler *handler.UserProfileHandler, commentHandler *handler.CommentHandler) {
 	// Swagger documentation endpoint
 	app.Get("/docs/*", swagger.HandlerDefault)
 
@@ -20,6 +20,7 @@ func SetupRoutes(app *fiber.App, projectHandler *handler.ProjectHandler, profile
 	projects.Get("/:id", projectHandler.GetProjectByID)
 	projects.Post("/", projectHandler.CreateProject)
 	projects.Patch("/:id", projectHandler.UpdateProject)
+	projects.Put("/:id", projectHandler.ReplaceProject)
 
 	// Routes untuk Investors (nested under projects)
 	projects.Get("/:id/investors", projectHandler.GetInvestors)
@@ -31,10 +32,7 @@ func SetupRoutes(app *fiber.App, projectHandler *handler.ProjectHandler, profile
 	projects.Post("/:id/comments", commentHandler.CreateComment)
 
 	// Routes untuk External Links (nested under projects)
-	projects.Get("/:id/links", linkHandler.GetLinksByProjectID)
-	projects.Post("/:id/links", linkHandler.CreateLink)
-	projects.Put("/:id/links/:linkId", linkHandler.UpdateLink)
-	projects.Delete("/:id/links/:linkId", linkHandler.DeleteLink)
+	// External links are now handled as part of project payload (links field)
 
 	// Routes untuk User Profiles
 	profiles := api.Group("/profiles")

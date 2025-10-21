@@ -169,6 +169,47 @@ func (h *ProjectHandler) UpdateProject(c *fiber.Ctx) error {
 	return c.JSON(project)
 }
 
+// ReplaceProject godoc
+// @Summary      Replace project
+// @Description  Fully replace project data including links (PUT). Links provided will replace existing links.
+// @Tags         Projects
+// @Accept       json
+// @Produce      json
+// @Param        id       path      string            true  "Project ID (numeric timestamped ID)"
+// @Param        project  body      model.ProjectCreate  true  "Full project data (links included)"
+// @Success      200      {object}  model.ProjectSwagger
+// @Failure      400      {object}  model.ErrorResponse
+// @Failure      404      {object}  model.ErrorResponse
+// @Failure      500      {object}  model.ErrorResponse
+// @Router       /projects/{id} [put]
+func (h *ProjectHandler) ReplaceProject(c *fiber.Ctx) error {
+	idParam := c.Params("id")
+	id, err := strconv.ParseUint(idParam, 10, 64)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid project ID format",
+		})
+	}
+
+	var project model.Project
+	if err := c.BodyParser(&project); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Invalid request body",
+		})
+	}
+
+	// ensure ID matches path
+	project.ID = id
+
+	if err := h.repo.Update(&project); err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to update project",
+		})
+	}
+
+	return c.JSON(project)
+}
+
 // AddInvestor godoc
 // @Summary      Add investor to project
 // @Description  Add an investor's wallet address to a project

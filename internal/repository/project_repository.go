@@ -20,14 +20,14 @@ func NewProjectRepository(db *gorm.DB) *ProjectRepository {
 // GetAll mengambil semua proyek
 func (r *ProjectRepository) GetAll() ([]model.Project, error) {
 	var projects []model.Project
-	result := r.db.Find(&projects)
+	result := r.db.Preload("Links").Find(&projects)
 	return projects, result.Error
 }
 
 // GetByID mengambil proyek berdasarkan ID
 func (r *ProjectRepository) GetByID(id uint64) (*model.Project, error) {
 	var project model.Project
-	result := r.db.First(&project, "id = ?", id)
+	result := r.db.Preload("Links").First(&project, "id = ?", id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
@@ -36,12 +36,49 @@ func (r *ProjectRepository) GetByID(id uint64) (*model.Project, error) {
 
 // Create membuat proyek baru
 func (r *ProjectRepository) Create(project *model.Project) error {
-	return r.db.Create(project).Error
+	// create project and its links in a transaction
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(project).Error; err != nil {
+			return err
+		}
+		// If links provided, ensure ProjectID is set and create them
+		if len(project.Links) > 0 {
+			for i := range project.Links {
+				// ensure DB will assign the ID (avoid inserting explicit id causing duplicates)
+				project.Links[i].ID = 0
+				project.Links[i].ProjectID = project.ID
+			}
+			if err := tx.Create(&project.Links).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 // Update memperbarui proyek
 func (r *ProjectRepository) Update(project *model.Project) error {
-	return r.db.Save(project).Error
+	// replace project fields and replace links in a transaction
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Save(project).Error; err != nil {
+			return err
+		}
+		// Replace links: delete existing and insert new ones if provided
+		if err := tx.Where("project_id = ?", project.ID).Delete(&model.ExternalLink{}).Error; err != nil {
+			return err
+		}
+		if len(project.Links) > 0 {
+			for i := range project.Links {
+				// ensure DB will assign the ID for new links
+				project.Links[i].ID = 0
+				project.Links[i].ProjectID = project.ID
+			}
+			if err := tx.Create(&project.Links).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 // UpdatePartial memperbarui sebagian field proyek

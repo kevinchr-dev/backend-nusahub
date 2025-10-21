@@ -59,13 +59,10 @@ func main() {
 	projectRepo := repository.NewProjectRepository(db)
 	profileRepo := repository.NewUserProfileRepository(db)
 	commentRepo := repository.NewCommentRepository(db)
-	linkRepo := repository.NewExternalLinkRepository(db)
-
 	// Inisialisasi handlers
 	projectHandler := handler.NewProjectHandler(projectRepo)
 	profileHandler := handler.NewUserProfileHandler(profileRepo)
 	commentHandler := handler.NewCommentHandler(commentRepo, projectRepo)
-	linkHandler := handler.NewExternalLinkHandler(linkRepo, projectRepo)
 
 	// Inisialisasi Fiber app
 	app := fiber.New(fiber.Config{
@@ -94,7 +91,7 @@ func main() {
 	}))
 
 	// Setup routes
-	router.SetupRoutes(app, projectHandler, profileHandler, commentHandler, linkHandler)
+	router.SetupRoutes(app, projectHandler, profileHandler, commentHandler)
 
 	// Root endpoint
 	app.Get("/", func(c *fiber.Ctx) error {
